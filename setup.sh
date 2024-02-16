@@ -9,7 +9,6 @@ fi
 if [ "$(uname -m)" == "x86_64" ] && [  "$(uname)" == "Linux" ];then
     echo "Device arch: Linux x86_64"
     apt update -y
-    apt upgrade -y
     apt install -y aria2 python3 busybox zip unzip p7zip-full openjdk-8-jre zipalign
     if [ $? -ne 0 ];then
         echo "安装可能出错，请手动执行：apt install -y python3 busybox zip unzip p7zip-full"
