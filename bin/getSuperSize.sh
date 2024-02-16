@@ -5,12 +5,12 @@ case $device_code in
 	FUXI | NUWA |ISHTAR) size=9663676416;;
 	#RedmiNote12Turbo |K60Pro |MIXFold
 	MARBLE |SOCRATES|BABYLON) size=9663676416;;
-	#Redmi Note 12 5G
-	SUNSTONE) size=9122611200;;
+	#Redmi Note 12R
+	SKY) size=6979321856;;
 	#PAD6Max
 	YUDI) size=11811160064;;
 	#Others
-	*) size=9126805504;;
+	*) size=6979321856;;
 esac
 echo $size
 
