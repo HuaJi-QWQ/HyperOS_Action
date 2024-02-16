@@ -6,12 +6,8 @@
 
 # Based on Android 14 HyperOS
 
-# LZY made with love 0202 & 0227
-
-# 2023.12.26
-
 build_user="LazyBones"
-build_host="LZY_PvE_SERVER"
+build_host="LZY_PVE_SERVER"
 
 # 底包和移植包为外部参数传入
 baserom="$1"
