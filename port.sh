@@ -455,8 +455,9 @@ green "添加动画多线程支持"
 echo "persist.sys.miui_animator_sched.sched_threads=2" >> build/portrom/images/product/etc/build.prop
 
 green "添加 Via 浏览器作为默认浏览器存在"
+wget https://res.viayoo.com/v1/via-release-cn.apk -O ./via.apk
 mkdir build/portrom/images/product/app/Via
-cp -rf devices/via.apk build/portrom/images/product/app/Via/
+cp -rf ./via.apk build/portrom/images/product/app/Via/
 
 baseDevicesAndroidOverlay=$(find build/baserom/images/product -type f -name "DevicesAndroidOverlay.apk")
 portDevicesAndroidOverlay=$(find build/portrom/images/product -type f -name "DevicesAndroidOverlay.apk")
@@ -810,16 +811,9 @@ else
 fi
 
 #自定义替换
-if [[ -d "devices/common" ]];then
-    commonCamera=$(find devices/common -type f -name "MiuiCamera.apk")
-    targetCamera=$(find build/portrom/images/product -type d -name "MiuiCamera")
-    bootAnimationZIP=$(find devices/common -type f -name "bootanimation_${base_rom_density}.zip")
-    targetAnimationZIP=$(find build/portrom/images/product -type f -name "bootanimation.zip")
-    if [[ -f "$bootAnimationZIP" ]];then
-        yellow "替换开机第二屏动画" "Repacling bootanimation.zip"
-        cp -rfv $bootAnimationZIP $targetAnimationZIP
-    fi
-fi
+yellow "替换开机第二屏动画" "Repacling bootanimation.zip"
+rm build/portrom/images/product/media/bootanimation.zip
+cp -rf build/baserom/images/product/media/bootanimation.zip build/portrom/images/product/media/bootanimation.zip
 
 # 去除avb校验
 blue "去除avb校验" "Disable avb verification."
