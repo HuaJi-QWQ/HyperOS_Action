@@ -6,12 +6,12 @@
 
 # Based on Android 14 HyperOS
 
-# tosasitill made with love 0202 & 0227
+# LZY made with love 0202 & 0227
 
 # 2023.12.26
 
-build_user="Bruce Teng, tosasitill"
-build_host="pangu-build-Ubuntu_tosasitill"
+build_user="LazyBones"
+build_host="LZY_PvE_SERVER"
 
 # 底包和移植包为外部参数传入
 baserom="$1"
@@ -508,28 +508,10 @@ elif [[ "$brightness_fix_method" == "stock" ]];then
         fi
 fi
 
-green "正在修复 NFC"
-
-cp -rf devices/nfc/bin/hw/vendor.nxp.hardware.nfc@2.0-service build/portrom/images/vendor/bin/hw/
-cp -rf devices/nfc/bin/nqnfcinfo build/portrom/images/vendor/bin/
-cp -rf devices/nfc/etc/libnfc-*.conf build/portrom/images/vendor/etc/
-cp -rf devices/nfc/etc/init/vendor.nxp.hardware.nfc@2.0-service.rc build/portrom/images/vendor/etc/init/
-cp -rf devices/nfc/etc/sn100u_nfcon.pnscr build/portrom/images/vendor/etc/
-cp -rf devices/nfc/etc/permissions/android.*.xml build/portrom/images/vendor/etc/permissions/
-cp -rf devices/nfc/firmware/96_nfcCard_RTP.bin build/portrom/images/vendor/firmware/
-cp -rf devices/nfc/firmware/98_nfcCardSlow_RTP.bin build/portrom/images/vendor/firmware/
-cp -rf devices/nfc/lib/nfc_nci.nqx.default.hw.so build/portrom/images/vendor/lib/
-cp -rf devices/nfc/lib/vendor.nxp.hardware.nfc@2.0.so build/portrom/images/vendor/lib/
-cp -rf devices/nfc/lib/modules/nfc_i2c.ko build/portrom/images/vendor/lib/modules/
-cp -rf devices/nfc/lib/modules/5.4-gki/nfc_i2c.ko build/portrom/images/vendor/lib/modules/5.4-gki/
-cp -rf devices/nfc/lib64/nfc_nci.nqx.default.hw.so build/portrom/images/vendor/lib64/
-cp -rf devices/nfc/lib64/vendor.nxp.hardware.nfc@2.0.so build/portrom/images/vendor/lib64/
-
-green "NFC修复成功"
 
 green "正在精简无用的 VNDK"
+rm -rf build/portrom/images/system_ext/apex/com.android.vndk.v30.apex
 rm -rf build/portrom/images/system_ext/apex/com.android.vndk.v31.apex
-rm -rf build/portrom/images/system_ext/apex/com.android.vndk.v32.apex
 rm -rf build/portrom/images/system_ext/apex/com.android.vndk.v33.apex
 green "精简完毕"
 
@@ -543,6 +525,20 @@ echo "debug.sf.set_idle_timer_ms=1100" >> build/portrom/images/vendor/build.prop
 # device_features
 blue "复制设备特性XML文件"   
 cp -rf  build/baserom/images/product/etc/device_features/* build/portrom/images/product/etc/device_features/
+
+# 刷新率
+echo "ro.vendor.fps.switch.default=true" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.cabc.enable=true" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.fps.switch.thermal=true" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.smart_dfps.enable=ture" >> build/portrom/images/vendor/build.prop
+echo "vendor.display.disable_dynamic_sf_idle=1" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.dfps.enable=true" >> build/portrom/images/vendor/build.prop
+echo "persist.vendor.disable_idle_fps.threshold=0" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.display.touch.idle.enable=true" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.display.idle_default_fps=48" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.mi_sf.video_or_camera_fps.support=true" >> build/portrom/images/vendor/build.prop
+echo "ro.vendor.display.set_fps_stat_timer_ms=200" >> build/portrom/images/vendor/build.prop
+echo "ro.surface_flinger.enable_frame_rate_override=false" >> build/portrom/images/vendor/build.prop
 
 # 屏幕密度修修改
 for prop in $(find build/baserom/images/product build/baserom/images/system -type f -name "build.prop");do
@@ -618,11 +614,6 @@ if [ ! -f "${port_vndk}" ]; then
     yellow "apex不存在，从原包复制" "target apex is missing, copying from baserom"
     cp -rf "${base_vndk}" "build/portrom/images/system_ext/apex/"
 fi
-
-green "正在替换徕卡相机APK"
-rm -rf build/portrom/images/product/priv-app/MiuiCamera
-mkdir build/portrom/images/product/priv-app/MiuiCamera
-cp -rf devices/MiuiCamera.apk build/portrom/images/product/priv-app/MiuiCamera/
 
 green "修复GPU驱动卡顿"
 blue "触控优化" "Touch optimization"
@@ -790,9 +781,7 @@ for i in $(find build/portrom/images -type f -name "build.prop");do
 done
 
 # 修复各种疑难杂症
-echo "# tosasitill here made with love" >> build/portrom/images/product/etc/build.prop
 echo "ro.miui.cust_erofs=0" >> build/portrom/images/product/etc/build.prop
-echo "# tosasitill here 0202 & 0227" >> build/portrom/images/system/system/build.prop
 echo "ro.crypto.state=encrypted" >> build/portrom/images/system/system/build.prop
 echo "debug.game.video.support=true" >> build/portrom/images/system/system/build.prop
 echo "debug.game.video.speed=true" >> build/portrom/images/system/system/build.prop
